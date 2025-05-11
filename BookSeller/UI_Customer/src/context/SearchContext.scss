@@ -1,0 +1,53 @@
+.navbar-search {
+  display: flex;
+  align-items: center;
+  margin: 0 2rem 0 auto;
+  flex: 1;
+  max-width: 400px;
+  justify-content: flex-end;
+
+  .search-input {
+    padding: 8.5px 14px;
+    width: 220px;
+    font-size: 1rem;
+    border: 1.5px solid #ccc;
+    border-radius: 20px 0 0 20px;
+    outline: none;
+    transition: border 0.2s;
+    background: #fff;
+    &:focus {
+      border-color: #27ae60;
+    }
+  }
+  .search-button {
+    padding: 9px 16px;
+    font-size: 1.2rem;
+    border: none;
+    background-color: #27ae60;
+    color: #fff;
+    border-radius: 0 20px 20px 0;
+    cursor: pointer;
+    transition: background 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    &:hover {
+      background-color: #219150;
+    }
+  }
+}
+
+// Responsive cho mobile
+@media (max-width: 600px) {
+  .navbar-search {
+    max-width: 98vw;
+    .search-input {
+      width: 110px;
+      font-size: 0.95rem;
+    }
+    .search-button {
+      font-size: 1rem;
+      padding: 7px 10px;
+    }
+  }
+}

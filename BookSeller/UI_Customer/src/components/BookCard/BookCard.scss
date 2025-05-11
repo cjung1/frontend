@@ -1,0 +1,83 @@
+.book-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  border: 1px solid #ddd;
+  padding: 24px 24px 0 24px;
+  text-align: center;
+  height: 380px; // tăng chiều cao
+  width: 220px; // tăng chiều rộng
+  border-radius: 8px;
+  background-color: white;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  position: relative;
+
+  &:hover {
+    transform: translateY(-5px) scale(1.02);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    border-color: #4caf50;
+  }
+
+  img {
+    width: 180px;
+    height: 250px;
+    object-fit: cover;
+  }
+
+  .book-details {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    align-items: center;
+    flex-grow: 1;
+    height: 100%;
+
+    h3 {
+      font-size: 16px;
+      margin: 6px 0;
+      height: 42px; // hoặc cao hơn nếu cần
+      overflow: hidden;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      text-overflow: ellipsis;
+      max-width: 100%;
+    }
+
+    .price-cart {
+      display: flex;
+      justify-content: space-between;
+      width: 100%;
+      align-items: center;
+
+      .price {
+        font-size: 1rem; // tăng nhẹ kích thước
+        color: #333;
+      }
+
+      .add-to-cart {
+        background-color: #4caf50;
+        color: white;
+        padding: 9px;
+        border: none;
+        cursor: pointer;
+        font-size: 1rem;
+        border-radius: 4px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 5px;
+
+        &:hover {
+          background-color: #45a049;
+        }
+
+        svg {
+          font-size: 20px; // tăng kích thước icon
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,10 @@
+/* ErrorBoundary không cần nhiều SCSS vì nó chỉ hiển thị thông báo lỗi đơn giản,
+   nhưng nếu muốn làm nổi bật thông báo lỗi, bạn có thể thêm vào một số style như sau: */
+
+.error-message {
+  color: red;
+  font-size: 1.5rem;
+  font-weight: bold;
+  text-align: center;
+  margin-top: 2rem;
+}
