@@ -6,6 +6,52 @@ nav {
   justify-content: space-between;
   align-items: center;
 
+  .navbar-left {
+    display: flex;
+    align-items: center;
+    min-width: 140px;
+    justify-content: flex-start;
+  }
+
+  .navbar-center {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0 32px;
+    ul {
+      list-style: none;
+      display: flex;
+      gap: 2.5rem;
+      margin: 0;
+      li {
+        a {
+          color: #000;
+          text-decoration: none;
+          font-size: 1.1rem;
+          font-weight: 600;
+          font-family: "civil-medium", sans-serif;
+          transition: color 0.2s;
+          &:hover {
+            color: #27ae60;
+          }
+        }
+      }
+    }
+  }
+
+  .navbar-right {
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+    min-width: 220px;
+    justify-content: flex-end;
+    padding-right: 2.5rem;
+    .navbar-search {
+      margin-right: 0.7rem;
+    }
+  }
+
   .shop {
     font-size: 2rem;
     margin: 0;
@@ -25,21 +71,6 @@ nav {
       display: block;
       margin: 0;
       padding: 0;
-    }
-  }
-
-  ul {
-    list-style: none;
-    display: flex;
-    gap: 2rem;
-    margin: 0;
-
-    li {
-      a {
-        color: #000;
-        text-decoration: none;
-        font-size: 1.1rem;
-      }
     }
   }
 }
@@ -63,11 +94,11 @@ nav {
   left: 16px;
   background: #156fc1;
   color: #fff;
-  font-size: 0.95rem;
+  font-size: 0.85rem;
   font-weight: bold;
   border-radius: 50%;
-  padding: 2px 7px 2px 7px;
-  min-width: 20px;
+  padding: 1.5px 5px;
+  min-width: 15px;
   text-align: center;
   border: 2px solid #fff;
   box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);

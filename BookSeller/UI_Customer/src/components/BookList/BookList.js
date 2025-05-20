@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext } from "react";
+import React, { useEffect, useState, useContext, useRef } from "react";
 import BookCard from "../BookCard/BookCard";
 import { SearchContext } from "../../context/SearchContext";
 import "./BookList.scss";
@@ -10,6 +10,8 @@ const BookList = () => {
   const { searchTerm } = useContext(SearchContext);
   const [query, setQuery] = useState(searchTerm || "react");
   const [sortPrice, setSortPrice] = useState(""); // '', 'asc', 'desc'
+  const [totalItems, setTotalItems] = useState(0);
+  const gridRef = useRef(null);
 
   useEffect(() => {
     setQuery(searchTerm.trim() === "" ? "react" : searchTerm);
@@ -22,6 +24,7 @@ const BookList = () => {
       );
       const data = await response.json();
       setBooks(data.items || []);
+      setTotalItems(data.totalItems || 0);
     };
     fetchBooks();
   }, [query, startIndex, maxResults]);
@@ -70,42 +73,125 @@ const BookList = () => {
     setStartIndex(0);
   }, [searchTerm]);
 
-  return (
-    <div>
-      <div className="booklist-toolbar">
-        <label htmlFor="sort-price">Sắp xếp theo : </label>
-        <select
-          id="sort-price"
-          value={sortPrice}
-          onChange={(e) => setSortPrice(e.target.value)}
-          className="sort-select"
-        >
-          <option value="">Mặc định</option>
-          <option value="asc">Giá tăng dần</option>
-          <option value="desc">Giá giảm dần</option>
-        </select>
-      </div>
-      <div className="grid">
-        {sortedBooks.length > 0 ? (
-          sortedBooks.map((book) => <BookCard key={book.id} book={book} />)
-        ) : (
-          <p>Không có sách phù hợp với tìm kiếm của bạn.</p>
-        )}
-      </div>
-      <div className="pagination">
+  const totalPages = Math.ceil(totalItems / maxResults);
+  const currentPage = Math.floor(startIndex / maxResults) + 1;
+
+  // Helper to render pagination numbers with ellipsis
+  const renderPageNumbers = () => {
+    const pageNumbers = [];
+    if (totalPages <= 7) {
+      for (let i = 1; i <= totalPages; i++) {
+        pageNumbers.push(i);
+      }
+    } else {
+      if (currentPage <= 3) {
+        pageNumbers.push(1, 2, 3, 4, "...", totalPages);
+      } else if (currentPage >= totalPages - 2) {
+        pageNumbers.push(
+          1,
+          "...",
+          totalPages - 3,
+          totalPages - 2,
+          totalPages - 1,
+          totalPages
+        );
+      } else {
+        pageNumbers.push(
+          1,
+          "...",
+          currentPage - 1,
+          currentPage,
+          currentPage + 1,
+          "...",
+          totalPages
+        );
+      }
+    }
+    return pageNumbers.map((num, idx) => {
+      if (num === "...") {
+        return (
+          <span key={"ellipsis-" + idx} className="pagination-ellipsis">
+            ...
+          </span>
+        );
+      }
+      return (
         <button
-          onClick={() =>
-            setStartIndex((prev) => Math.max(prev - maxResults, 0))
-          }
+          key={num}
+          className={`pagination-page${num === currentPage ? " active" : ""}`}
+          onClick={() => setStartIndex((num - 1) * maxResults)}
+          disabled={num === currentPage}
         >
-          ←
+          {num}
         </button>
-        <span>Trang {Math.floor(startIndex / maxResults) + 1}</span>
-        <button onClick={() => setStartIndex((prev) => prev + maxResults)}>
-          →
-        </button>
+      );
+    });
+  };
+
+  useEffect(() => {
+    const cards = gridRef.current?.querySelectorAll(".book-card");
+    if (!cards) return;
+    const observer = new window.IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("visible");
+          }
+        });
+      },
+      { threshold: 0.15 }
+    );
+    cards.forEach((card) => observer.observe(card));
+    return () => observer.disconnect();
+  }, [sortedBooks]);
+
+  return (
+    <>
+      <img src="/hinh-anh-cuon-sach-co-mo-ra_051457868.png" alt="Sách mở ra" />
+      <div>
+        <div className="booklist-toolbar">
+          <label htmlFor="sort-price">Sắp xếp theo : </label>
+          <select
+            id="sort-price"
+            value={sortPrice}
+            onChange={(e) => setSortPrice(e.target.value)}
+            className="sort-select"
+          >
+            <option value="">Mặc định</option>
+            <option value="asc">Giá tăng dần</option>
+            <option value="desc">Giá giảm dần</option>
+          </select>
+        </div>
+        <div className="grid" ref={gridRef}>
+          {sortedBooks.length > 0 ? (
+            sortedBooks.map((book) => <BookCard key={book.id} book={book} />)
+          ) : (
+            <p>Không có sách phù hợp với tìm kiếm của bạn.</p>
+          )}
+        </div>
+        <div className="pagination">
+          <button
+            onClick={() =>
+              setStartIndex((prev) => Math.max(prev - maxResults, 0))
+            }
+            disabled={currentPage === 1}
+          >
+            ←
+          </button>
+          {renderPageNumbers()}
+          <button
+            onClick={() =>
+              setStartIndex((prev) =>
+                Math.min(prev + maxResults, (totalPages - 1) * maxResults)
+              )
+            }
+            disabled={currentPage === totalPages || totalPages === 0}
+          >
+            →
+          </button>
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 
