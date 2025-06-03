@@ -1,8 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import "./Home.scss";
-
-const BOOKS_PER_SLIDE = 8;
+import RecommendedBooks from "../../components/recommendedBook/recommendedBook";
 
 const Home = () => {
   const [members, setMembers] = useState([]);
@@ -75,19 +74,10 @@ const Home = () => {
     ]);
 
     fetchRecommended();
-  }, [book]);
-
-  // Helper to format price
-  const formatPrice = (price) => {
-    if (!price) return 999999;
-    return price.toLocaleString("vi-VN");
-  };
+  }, [book, bookId]);
 
 
   // Slider navigation
-  const maxIndex = Math.max(0, products.length - BOOKS_PER_SLIDE);
-  const handlePrev = () => setRecIndex((i) => Math.max(i - 1, 0));
-  const handleNext = () => setRecIndex((i) => Math.min(i + 1, maxIndex));
 
   if (!book) {
     return <p className="loading">Đang tải thông tin sách...</p>;
@@ -128,76 +118,12 @@ const Home = () => {
       </section>
 
       {/* Suggested Books Section */}
-      <div className="product-section">
-                <div className="product-header">
-                  <h3>Sản Phẩm Của Chúng Tôi</h3>
-                  <Link to="/products">Xem thêm</Link>
-                </div>
-                <div className="product-slider">
-                  <button
-                    className="slider-arrow left"
-                    onClick={handlePrev}
-                    disabled={recIndex === 0}
-                  >
-                    &#8592;
-                  </button>
-                  <div className="product-list-wrapper">
-                    <div
-                      className="product-list"
-                      style={{
-                        transform: `translateX(-${
-                          recIndex * (100 / BOOKS_PER_SLIDE)
-                        }%)`,
-                        transition: "transform 0.5s cubic-bezier(0.77, 0, 0.175, 1)",
-                      }}
-                    >
-                      {products.map((b) => (
-                        <Link
-                          to={`/book/${b.id}`}
-                          key={b.id}
-                          style={{ textDecoration: "none", color: "inherit" }}
-                        >
-                          <div className="product-item">
-                            <img
-                              src={
-                                b.volumeInfo.imageLinks?.thumbnail ||
-                                "https://via.placeholder.com/120x180?text=No+Image"
-                              }
-                              alt={b.volumeInfo.title}
-                            />
-                            <div className="product-title">
-                              {b.volumeInfo.title}
-                            </div>
-                            <div className="product-prices">
-                              <span className="product-price">
-                                {b.saleInfo?.listPrice?.amount
-                                  ? formatPrice(b.saleInfo.listPrice.amount)
-                                  : formatPrice(999999)}
-                                ₫
-                              </span>
-                              {b.saleInfo?.listPrice?.amount &&
-                                b.saleInfo?.retailPrice?.amount &&
-                                b.saleInfo.retailPrice.amount >
-                                  b.saleInfo.listPrice.amount && (
-                                  <span className="product-old-price">
-                                    {formatPrice(b.saleInfo.retailPrice.amount)}₫
-                                  </span>
-                                )}
-                            </div>
-                          </div>
-                        </Link>
-                      ))}
-                    </div>
-                  </div>
-                  <button
-                    className="slider-arrow right"
-                    onClick={handleNext}
-                    disabled={recIndex === maxIndex}
-                  >
-                    &#8594;
-                  </button>
-                </div>
-              </div>
+      <RecommendedBooks
+  books={products}
+  recIndex={recIndex}
+  setRecIndex={setRecIndex}
+  title="Sản phẩm của chúng tôi"
+/>
     </div>
   );
 };

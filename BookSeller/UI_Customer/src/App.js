@@ -15,10 +15,10 @@ import Support from './pages/Support/support';
 import OrderGuide from './pages/Support/customer-support/order-guide';
 import ShippingGuide from './pages/Support/customer-support/shipping-guide';
 import PaymentGuide from './pages/Support/customer-support/payment-guide';
-import { CartProvider } from "./context/CartContext"; // Bọc ứng dụng với CartProvider
+import { CartProvider } from "./context/CartContext"; 
 import { SearchProvider } from "./context/SearchContext";
-import { AuthProvider } from "./context/AuthContext"; // Bọc ứng dụng với AuthProvider
-import Profile from './pages/Profile/Profile'; // Trang thông tin cá nhân
+import { AuthProvider } from "./context/AuthContext"; 
+import Profile from './pages/Profile/Profile'; 
 
 function App() {
   return (
@@ -31,16 +31,16 @@ function App() {
               <Route path="/" element={<Home />} />
               <Route path="/about" element={<About />} />
               <Route path="/products" element={<Products />} />
-              <Route path="/cart" element={<Cart />} /> {/* Route cho giỏ hàng */}
-              <Route path="/book/:bookId" element={<BookDetail />} />{" "}
+              <Route path="/cart" element={<Cart />} /> 
+              <Route path="/book/:bookId" element={<BookDetail />} />
               <Route path="/contact" element={<Contact />} />
               <Route path="/support" element={<Support />} />
               <Route path="/customer-support/order-guide" element={<OrderGuide />} />
               <Route path="/customer-support/shipping-guide" element={<ShippingGuide />} />
               <Route path="/customer-support/payment-guide" element={<PaymentGuide />} />
-              <Route path="/login" element={<Login />} /> {/* Route cho trang đăng nhập */}
-              <Route path="/register" element={<Register />} /> {/* Route cho trang đăng ký */}
-              <Route path="/profile" element={<Profile />} /> {/* Route cho trang thông tin cá nhân */}
+              <Route path="/login" element={<Login />} /> 
+              <Route path="/register" element={<Register />} /> 
+              <Route path="/profile" element={<Profile />} /> 
             </Routes>
             <Footer />
           </AuthProvider>

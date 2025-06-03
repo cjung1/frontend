@@ -1,4 +1,4 @@
-// formatPrice.js
+
 
 /**
  * Hàm định dạng giá tiền dưới dạng tiền tệ
