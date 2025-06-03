@@ -1,7 +1,7 @@
-import { useCart } from "../context/CartContext";
+import { useCart } from "../../context/CartContext";
 import React, { useState } from "react";
 import { useParams, Link } from "react-router-dom"; // Để lấy params từ URL
-import { FaCartPlus, FaAngleRight } from "react-icons/fa"; // Thêm biểu tượng giỏ hàng
+import { FaAngleRight } from "react-icons/fa"; // Thêm biểu tượng giỏ hàng
 import "./BookDetail.scss";
 
 const BOOKS_PER_SLIDE = 5;
@@ -93,6 +93,10 @@ const BookDetail = () => {
           Trang chủ
         </Link>
         <FaAngleRight className="breadcrumb-sep" />
+        <Link to="/products" className="breadcrumb-next">
+          Sản phẩm
+        </Link>
+        <FaAngleRight className="breadcrumb-sep" />
         <span className="breadcrumb-current">{book.volumeInfo.title}</span>
       </div>
       <div className="book-detail">
@@ -151,12 +155,21 @@ const BookDetail = () => {
         </div>
         <div className="book-desc-section">
           <h3 className="desc-heading">Giới thiệu sách</h3>
-          <div className="description">{book.volumeInfo.description}</div>
+          <div
+  className="description"
+  dangerouslySetInnerHTML={{
+    __html: book.volumeInfo.description
+      ?.replace(/Ê|_Ê/g, "")
+      .replace(/<p><br><\/p>/g, ""),
+  }}
+></div>
+
         </div>
+        
         <div className="recommend-section">
           <div className="recommend-header">
             <h3>Có thể bạn cũng thích</h3>
-            <Link to="/">Xem thêm</Link>
+            <Link to="/products">Xem thêm</Link>
           </div>
           <div className="recommend-slider">
             <button

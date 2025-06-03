@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext, useRef } from "react";
+import React, { useEffect, useState, useContext, useRef, useMemo } from "react";
 import BookCard from "../BookCard/BookCard";
 import { SearchContext } from "../../context/SearchContext";
 import "./BookList.scss";
@@ -35,20 +35,23 @@ const BookList = () => {
       ? book.saleInfo.listPrice.amount
       : 999999;
 
-  let sortedBooks = [...books];
-  if (sortPrice === "asc") {
-    sortedBooks.sort((a, b) => getBookPrice(a) - getBookPrice(b));
-  } else if (sortPrice === "desc") {
-    sortedBooks.sort((a, b) => getBookPrice(b) - getBookPrice(a));
-  } else {
-    sortedBooks.sort((a, b) => {
-      const titleA = a.volumeInfo.title.toLowerCase();
-      const titleB = b.volumeInfo.title.toLowerCase();
-      if (titleA < titleB) return -1;
-      if (titleA > titleB) return 1;
-      return 0;
-    });
-  }
+  const sortedBooks = useMemo(() => {
+    let sorted = [...books];
+    if (sortPrice === "asc") {
+      sorted.sort((a, b) => getBookPrice(a) - getBookPrice(b));
+    } else if (sortPrice === "desc") {
+      sorted.sort((a, b) => getBookPrice(b) - getBookPrice(a));
+    } else {
+      sorted.sort((a, b) => {
+        const titleA = a.volumeInfo.title.toLowerCase();
+        const titleB = b.volumeInfo.title.toLowerCase();
+        if (titleA < titleB) return -1;
+        if (titleA > titleB) return 1;
+        return 0;
+      });
+    }
+    return sorted;
+  }, [books, sortPrice]);
 
   useEffect(() => {
     // Điều chỉnh số lượng sách trên mỗi trang theo kích thước màn hình
@@ -76,56 +79,23 @@ const BookList = () => {
   const totalPages = Math.ceil(totalItems / maxResults);
   const currentPage = Math.floor(startIndex / maxResults) + 1;
 
-  // Helper to render pagination numbers with ellipsis
+  // Helper to render pagination numbers
   const renderPageNumbers = () => {
     const pageNumbers = [];
-    if (totalPages <= 7) {
-      for (let i = 1; i <= totalPages; i++) {
-        pageNumbers.push(i);
-      }
-    } else {
-      if (currentPage <= 3) {
-        pageNumbers.push(1, 2, 3, 4, "...", totalPages);
-      } else if (currentPage >= totalPages - 2) {
-        pageNumbers.push(
-          1,
-          "...",
-          totalPages - 3,
-          totalPages - 2,
-          totalPages - 1,
-          totalPages
-        );
-      } else {
-        pageNumbers.push(
-          1,
-          "...",
-          currentPage - 1,
-          currentPage,
-          currentPage + 1,
-          "...",
-          totalPages
-        );
-      }
+    // Chỉ hiển thị 10 trang đầu tiên
+    for (let i = 1; i <= 10; i++) {
+      pageNumbers.push(i);
     }
-    return pageNumbers.map((num, idx) => {
-      if (num === "...") {
-        return (
-          <span key={"ellipsis-" + idx} className="pagination-ellipsis">
-            ...
-          </span>
-        );
-      }
-      return (
-        <button
-          key={num}
-          className={`pagination-page${num === currentPage ? " active" : ""}`}
-          onClick={() => setStartIndex((num - 1) * maxResults)}
-          disabled={num === currentPage}
-        >
-          {num}
-        </button>
-      );
-    });
+    return pageNumbers.map((num) => (
+      <button
+        key={num}
+        className={`pagination-page${num === currentPage ? " active" : ""}`}
+        onClick={() => setStartIndex((num - 1) * maxResults)}
+        disabled={num === currentPage}
+      >
+        {num}
+      </button>
+    ));
   };
 
   useEffect(() => {

@@ -1,27 +1,49 @@
 // src/App.js
 import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import BookList from "./pages/Shop"; // Trang hiển thị danh sách sách
-import Cart from "./pages/Cart"; // Trang giỏ hàng
+import Products from "./pages/Products/Products"; // Trang hiển thị danh sách sách
+import Cart from "./pages/Cart/Cart"; // Trang giỏ hàng
+import Login from "./pages/Login/Login"; // Trang đăng nhập
+import Register from "./pages/Register/Register"; // Trang đăng ký
 import Navbar from "./components/NavBar/Navbar"; // Thanh điều hướng
+import About from "./pages/about/about";
+import Home from "./pages/Home/Home"; // Trang chủ
 import Footer from "./components/Footer/Footer"; // Footer
-import BookDetail from "./pages/BookDetail"; // Thêm trang BookDetail
+import BookDetail from "./pages/BookDetail/BookDetail"; // Thêm trang BookDetail
+import Contact from "./pages/Contact/contact";
+import Support from './pages/Support/support';
+import OrderGuide from './pages/Support/customer-support/order-guide';
+import ShippingGuide from './pages/Support/customer-support/shipping-guide';
+import PaymentGuide from './pages/Support/customer-support/payment-guide';
 import { CartProvider } from "./context/CartContext"; // Bọc ứng dụng với CartProvider
 import { SearchProvider } from "./context/SearchContext";
+import { AuthProvider } from "./context/AuthContext"; // Bọc ứng dụng với AuthProvider
+import Profile from './pages/Profile/Profile'; // Trang thông tin cá nhân
 
 function App() {
   return (
     <CartProvider>
       <SearchProvider>
         <Router>
-          <Navbar />
-          <Routes>
-            <Route path="/" element={<BookList />} />
-            <Route path="/cart" element={<Cart />} /> {/* Route cho giỏ hàng */}
-            <Route path="/book/:bookId" element={<BookDetail />} />{" "}
-            {/* Route cho chi tiết sách */}
-          </Routes>
-          <Footer />
+          <AuthProvider>
+            <Navbar />
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/about" element={<About />} />
+              <Route path="/products" element={<Products />} />
+              <Route path="/cart" element={<Cart />} /> {/* Route cho giỏ hàng */}
+              <Route path="/book/:bookId" element={<BookDetail />} />{" "}
+              <Route path="/contact" element={<Contact />} />
+              <Route path="/support" element={<Support />} />
+              <Route path="/customer-support/order-guide" element={<OrderGuide />} />
+              <Route path="/customer-support/shipping-guide" element={<ShippingGuide />} />
+              <Route path="/customer-support/payment-guide" element={<PaymentGuide />} />
+              <Route path="/login" element={<Login />} /> {/* Route cho trang đăng nhập */}
+              <Route path="/register" element={<Register />} /> {/* Route cho trang đăng ký */}
+              <Route path="/profile" element={<Profile />} /> {/* Route cho trang thông tin cá nhân */}
+            </Routes>
+            <Footer />
+          </AuthProvider>
         </Router>
       </SearchProvider>
     </CartProvider>

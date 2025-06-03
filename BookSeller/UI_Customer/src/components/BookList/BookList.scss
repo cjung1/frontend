@@ -49,7 +49,7 @@
   justify-content: center;
   align-items: center;
   gap: 0.5rem;
-  margin-top: 2rem;
+  margin: 2rem 0;
 
   button {
     padding: 0.5rem 1rem;
@@ -120,6 +120,7 @@
     background-repeat: no-repeat;
     background-position: right 10px center;
     background-size: 18px 18px;
+    margin-right: 33px;
     cursor: pointer;
     &:hover,
     &:focus {
