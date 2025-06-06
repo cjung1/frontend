@@ -1,7 +1,7 @@
 // src/pages/Cart.jsx
 import React, { useEffect, useState } from "react";
 import { FaTrash, FaAngleRight } from "react-icons/fa";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useCart } from "../../context/CartContext";
 import "./Cart.scss";
 
@@ -9,6 +9,7 @@ const Cart = () => {
   const { cart, removeFromCart, setCart } = useCart();
   const [totalPrice, setTotalPrice] = useState(0);
   const [inputQty, setInputQty] = useState({});
+  const navigate = useNavigate();
 
   const formatPrice = (price) => {
     if (!price) return 999999;
@@ -58,6 +59,16 @@ const Cart = () => {
     setCart(updatedCart);
   };
   
+  const handleCheckout = () => {
+    const cartItems = cart.map(book => ({
+      id: book.id,
+      name: book.volumeInfo.title,
+      price: book.saleInfo?.listPrice?.amount || 999999,
+      quantity: book.quantity || 1,
+      image: book.volumeInfo.imageLinks?.thumbnail
+    }));
+    navigate('/payment', { state: { cartItems } });
+  };
 
   return (
     <>
@@ -174,7 +185,7 @@ const Cart = () => {
               <div className="cart-summary">
                 Tổng tiền: <span>{formatPrice(totalPrice)}₫</span>
               </div>
-              <button className="cart-checkout-btn">Thanh toán</button>
+              <button className="cart-checkout-btn" onClick={handleCheckout}>Thanh toán</button>
             </>
           )}
         </div>
