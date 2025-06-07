@@ -1,6 +1,6 @@
 import { useCart } from "../../context/CartContext";
 import React, { useState } from "react";
-import { useParams, Link } from "react-router-dom"; // Để lấy params từ URL
+import { useParams, Link, useNavigate } from "react-router-dom"; // Để lấy params từ URL
 import { FaAngleRight } from "react-icons/fa"; // Thêm biểu tượng giỏ hàng
 import "./BookDetail.scss";
 import RecommendedBooks from "../../components/recommendedBook/recommendedBook";
@@ -13,6 +13,7 @@ const BookDetail = () => {
   const stock = 100; // giả lập tồn kho
   const [recommended, setRecommended] = React.useState([]);
   const [recIndex, setRecIndex] = useState(0);
+  const navigate = useNavigate();
 
   React.useEffect(() => {
     const fetchBookDetail = async () => {
@@ -72,8 +73,14 @@ const BookDetail = () => {
   };
 
   const handleBuyNow = () => {
-    // Tùy bạn xử lý, ví dụ chuyển hướng trang thanh toán hoặc alert
-    alert("Chức năng Mua ngay đang phát triển!");
+    const item = {
+      id: book.id,
+      name: book.volumeInfo.title,
+      price: book.saleInfo?.listPrice?.amount || 999999,
+      quantity: quantity,
+      image: book.volumeInfo.imageLinks?.thumbnail
+    };
+    navigate('/payment', { state: { cartItems: [item] } });
   };
   
 
