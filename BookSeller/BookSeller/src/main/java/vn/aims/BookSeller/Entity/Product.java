@@ -1,10 +1,13 @@
 package vn.aims.BookSeller.Entity;
 
 import jakarta.persistence.*;
+import lombok.Data;
+
 import java.math.BigDecimal;
 import java.time.*;
 
 @Entity
+@Data
 @Table(name = "product")
 public class Product {
 

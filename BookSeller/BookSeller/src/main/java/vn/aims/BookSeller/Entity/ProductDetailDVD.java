@@ -1,9 +1,12 @@
 package vn.aims.BookSeller.Entity;
 
 import jakarta.persistence.*;
+import lombok.Data;
+
 import java.time.LocalDate;
 
 @Entity
+@Data
 @Table(name = "product_detail_dvd")
 public class ProductDetailDVD {
 

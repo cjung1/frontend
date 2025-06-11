@@ -1,12 +1,15 @@
 package vn.aims.BookSeller.Entity;
 
 import jakarta.persistence.*;
+import lombok.Data;
+
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
 
 @Entity
+@Data
 @Table(name = "order")
 public class Order {
 
