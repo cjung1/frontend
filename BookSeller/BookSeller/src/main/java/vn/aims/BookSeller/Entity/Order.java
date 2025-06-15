@@ -18,6 +18,11 @@ public class Order {
     @Column(name = "order_id")
     private Integer orderId;
 
+    // Quan hệ nhiều đơn hàng thuộc 1 user
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = true)  // nullable nếu khách không đăng ký
+    private User user;
+
     @Column(name = "name", nullable = false)
     private String name;
 

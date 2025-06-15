@@ -5,7 +5,9 @@ import jakarta.persistence.*;
 import lombok.Data;
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 @Entity
 @Data
@@ -28,6 +30,14 @@ public class User {
      )
 
     Collection<Role> roles;
+
+    // Quan hệ 1-1 với Cart (1 user có 1 cart)
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY, optional = true)
+    private Cart cart;
+
+    // Quan hệ 1-n với Order (1 user có nhiều đơn hàng)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Order> orders = new ArrayList<>();
 
     private String email;
     private String phone;

@@ -25,6 +25,10 @@ public class Cart {
     @OneToMany(mappedBy = "cart", cascade = CascadeType.ALL)
     private List<CartItem> cartItems;
 
+    @OneToOne
+    @JoinColumn(name = "user_id", unique = true)  // user_id nullable nếu có khách ko đăng nhập
+    private User user;
+
     // Getters and Setters ...
 }
 
