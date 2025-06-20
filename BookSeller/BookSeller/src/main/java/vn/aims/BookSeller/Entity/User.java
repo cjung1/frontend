@@ -1,10 +1,12 @@
 package vn.aims.BookSeller.Entity;
 
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Data;
 
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -24,7 +26,7 @@ public class User {
 
     @ManyToMany(fetch = FetchType.EAGER)
      @JoinTable(
-             name = "users_roles",
+             name = "user_role",
              joinColumns=@JoinColumn(name = "user_id"),
              inverseJoinColumns=@JoinColumn(name = "role_id")
      )
@@ -33,6 +35,7 @@ public class User {
 
     // Quan hệ 1-1 với Cart (1 user có 1 cart)
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY, optional = true)
+    @JsonManagedReference
     private Cart cart;
 
     // Quan hệ 1-n với Order (1 user có nhiều đơn hàng)
@@ -42,7 +45,7 @@ public class User {
     private String email;
     private String phone;
     private Boolean status;
-    private Timestamp created_at;
+    private LocalDateTime created_at;
 
     public Integer getId() {
         return id;

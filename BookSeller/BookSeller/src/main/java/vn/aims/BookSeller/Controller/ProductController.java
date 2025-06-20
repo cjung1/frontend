@@ -21,8 +21,11 @@ public class ProductController {
         return this.bookService.findByAuthors(name);
     }
 
+
     @GetMapping("/all")
     public List<ProductDetailBook> findAll(){
         return this.bookService.findAll();
     }
+
+
 }
