@@ -5,16 +5,21 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
+import vn.aims.BookSeller.DTO.request.AuthorizationRequest;
 import vn.aims.BookSeller.DTO.request.UserCreationDTO;
 import vn.aims.BookSeller.DTO.request.UserUpdateRequest;
 import vn.aims.BookSeller.Entity.Cart;
+import vn.aims.BookSeller.Entity.Role;
 import vn.aims.BookSeller.Entity.User;
 import vn.aims.BookSeller.Repository.UserRepo;
 import vn.aims.BookSeller.Service.EmailService;
+import vn.aims.BookSeller.Service.RoleService;
 import vn.aims.BookSeller.Service.UserServiceImpl;
 
 import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 @RestController
@@ -29,6 +34,8 @@ public class UserController {
     @Autowired
 
     private PasswordEncoder passwordEncoder;
+    @Autowired
+    private RoleService roleService;
 //    @PostMapping("/register")
 //    public ResponseEntity<?> register(@RequestBody User user) {
 //        if (userRepo.existsByEmail(user.getEmail())) {
@@ -52,6 +59,9 @@ public class UserController {
         user.setEmail(dto.getEmail());
         user.setPhone(dto.getPhone());
         user.setCreated_at(LocalDateTime.now());
+        Set<Role> roles = new HashSet<>();
+        roles.add(this.roleService.findByName("ROLE_USER")); //khi tao moi user luon la ROLE_USER
+        user.setRoles(roles);
 
 
         userRepo.save(user);
@@ -80,5 +90,24 @@ public class UserController {
             return null;
         }
     }
+
+//    @GetMapping("/roles")
+//    public List<Role> getAllRoles(){
+//        return this.roleService.findAll();
+//    }
+//
+//    @GetMapping("/roles/{name}")
+//    public Role getRole(@PathVariable String name){
+//        return this.roleService.findByName(name);
+//    }  ==> test
+
+    @PostMapping("/authorize")
+    public ResponseEntity<User> authorize(@RequestBody AuthorizationRequest request) {
+        User updatedUser = userService.authorize(userService.getUser(request.getId()), request.getAuthority());
+        return ResponseEntity.ok(updatedUser);
+    }
+
+
+
 
 }

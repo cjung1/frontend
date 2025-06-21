@@ -21,7 +21,7 @@ public class UserServiceImpl implements UserService {
     private UserRepo userRepo;
 
     @Autowired
-    private RoleRepo roleRepository;
+    private RoleService roleService;
 
 
 
@@ -35,15 +35,6 @@ public class UserServiceImpl implements UserService {
         if (user.getId() == null && userRepo.findByUsername(user.getUsername()) != null) {
             throw new RuntimeException("Username đã tồn tại: " + user.getUsername());
         }
-
-        Set<Role> roles = new HashSet<>();
-        for (Role role : user.getRoles()) {
-            Role existingRole = roleRepository.findById(role.getId())
-                    .orElseThrow(() -> new RuntimeException("Role không tồn tại với id: " + role.getId()));
-            roles.add(existingRole);
-        }
-        roles.add(this.roleRepository.findByName("ROLE_USER")); //khi tao moi user luon la ROLE_USER
-        user.setRoles(roles);
 
         return userRepo.save(user);
     }
@@ -94,6 +85,11 @@ public class UserServiceImpl implements UserService {
         return roles.stream()
                 .map(role -> new SimpleGrantedAuthority(role.getName()))
                 .collect(Collectors.toList());
+    }
+
+    public User authorize(User u, String authorities){
+        u.getRoles().add(this.roleService.findByName(authorities));
+        return this.userRepo.save(u);
     }
 
 
