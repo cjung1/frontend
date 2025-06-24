@@ -1,6 +1,5 @@
 package vn.aims.BookSeller.Entity;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -28,7 +27,6 @@ public class Cart {
 
     @OneToOne
     @JoinColumn(name = "user_id", unique = true)  // user_id nullable nếu có khách ko đăng nhập
-    @JsonBackReference
     private User user;
 
     // Getters and Setters ...

@@ -1,7 +1,6 @@
 package vn.aims.BookSeller.Service;
 
 import org.springframework.security.core.userdetails.UserDetailsService;
-import vn.aims.BookSeller.DTO.request.UserUpdateRequest;
 import vn.aims.BookSeller.Entity.User;
 
 import java.util.List;
@@ -13,8 +12,6 @@ public interface UserService extends UserDetailsService {
     public User findByUsername(String name);
 
     public User save(User u);
-
-    public User updateUser(int id, UserUpdateRequest u);
 
     // Thêm CRUD
     List<User> findAll();

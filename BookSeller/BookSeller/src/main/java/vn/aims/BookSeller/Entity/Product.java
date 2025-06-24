@@ -49,18 +49,6 @@ public class Product {
     @Column(name = "created_by")
     private Integer createdBy;
 
-    @OneToOne(mappedBy = "product", cascade = CascadeType.ALL)
-    private ProductDetailBook productDetailBook;
-
-    @OneToOne(mappedBy = "product", cascade = CascadeType.ALL)
-    private ProductDetailCD productDetailCD;
-
-    @OneToOne(mappedBy = "product", cascade = CascadeType.ALL)
-    private ProductDetailDVD productDetailDVD;
-
-    @OneToOne(mappedBy = "product", cascade = CascadeType.ALL)
-    private ProductDetailLP productDetailLP;
-
     // Getters and Setters ...
 
     public String getTitle() {

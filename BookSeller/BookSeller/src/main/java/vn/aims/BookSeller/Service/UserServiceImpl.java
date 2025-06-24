@@ -6,9 +6,9 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-import vn.aims.BookSeller.DTO.request.UserUpdateRequest;
 import vn.aims.BookSeller.Entity.Role;
 import vn.aims.BookSeller.Entity.User;
+import vn.aims.BookSeller.Repository.BookRepo;
 import vn.aims.BookSeller.Repository.RoleRepo;
 import vn.aims.BookSeller.Repository.UserRepo;
 
@@ -21,8 +21,7 @@ public class UserServiceImpl implements UserService {
     private UserRepo userRepo;
 
     @Autowired
-    private RoleService roleService;
-
+    private RoleRepo roleRepository;
 
 
     @Override
@@ -35,6 +34,14 @@ public class UserServiceImpl implements UserService {
         if (user.getId() == null && userRepo.findByUsername(user.getUsername()) != null) {
             throw new RuntimeException("Username đã tồn tại: " + user.getUsername());
         }
+
+        Set<Role> roles = new HashSet<>();
+        for (Role role : user.getRoles()) {
+            Role existingRole = roleRepository.findById(role.getId())
+                    .orElseThrow(() -> new RuntimeException("Role không tồn tại với id: " + role.getId()));
+            roles.add(existingRole);
+        }
+        user.setRoles(roles);
 
         return userRepo.save(user);
     }
@@ -55,21 +62,6 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User updateUser(int id, UserUpdateRequest u){
-        User user =getUser(id);
-
-        user.setPassword(u.getPassword());
-        user.setUsername(u.getUsername());
-        user.setPhone(u.getPhone());
-        return userRepo.save(user);
-    }
-
-    public User getUser(Integer id){
-        return userRepo.findById(id).orElseThrow(()->new RuntimeException("User not found"));
-    }
-
-
-    @Override
 
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = userRepo.findByUsername(username);
@@ -86,12 +78,5 @@ public class UserServiceImpl implements UserService {
                 .map(role -> new SimpleGrantedAuthority(role.getName()))
                 .collect(Collectors.toList());
     }
-
-    public User authorize(User u, String authorities){
-        u.getRoles().add(this.roleService.findByName(authorities));
-        return this.userRepo.save(u);
-    }
-
-
 
 }

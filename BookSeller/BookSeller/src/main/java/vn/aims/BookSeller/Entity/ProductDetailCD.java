@@ -34,8 +34,6 @@ public class ProductDetailCD {
     @Column(name = "release_date")
     private LocalDate releaseDate;
 
-
-
     // Getters and Setters ...
 }
 
